@@ -12,20 +12,20 @@ const Footer = () => {
             className="btn btn-dark mb-3"
             onClick={() => navigate(-1)}
           >
-            &larr; Go Back
+            &larr; Uno Reverse 
           </button>
         )}
         <h4>
-          Made with{' '}
+          {/* Made with{' '} */}
           <span
             className="emoji"
             role="img"
             aria-label="heart"
             aria-hidden="false"
           >
-            ❤️
+            {/* ❤️ */}
           </span>{' '}
-          by the Tech Thoughts team.
+          {/* by the Tech Thoughts team. */}
         </h4>
       </div>
     </footer>
