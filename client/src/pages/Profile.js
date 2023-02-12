@@ -28,8 +28,7 @@ const Profile = () => {
   if (!user?.username) {
     return (
       <h4>
-        You need to be logged in to see this. Use the navigation links above to
-        sign up or log in!
+        Please log in...
       </h4>
     );
   }
@@ -38,7 +37,7 @@ const Profile = () => {
     <div>
       <div className="flex-row justify-center mb-3">
         <h2 className="col-12 col-md-10 bg-dark text-light p-3 mb-5">
-          Viewing {userParam ? `${user.username}'s` : 'your'} profile.
+          {userParam ? `${user.username}'s` : 'Your'} Subscriptions.
         </h2>
 
         <div className="col-12 col-md-10 mb-5">
