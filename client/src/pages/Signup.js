@@ -42,18 +42,18 @@ const Signup = () => {
     <main className="flex-row justify-center mb-4">
       <div className="col-12 col-lg-10">
         <div className="card">
-          <h4 className="card-header bg-dark text-light p-2">Sign Up</h4>
+          <h4 className="card-header bg-dark text-light p-2">Get Lead! Create an Account</h4>
           <div className="card-body">
             {data ? (
               <p>
-                Success! You may now head{' '}
-                <Link to="/">back to the homepage.</Link>
+                Account created! {' '}
+                <Link to="/">Start chewing here.</Link>
               </p>
             ) : (
               <form onSubmit={handleFormSubmit}>
                 <input
                   className="form-input"
-                  placeholder="Your username"
+                  placeholder="Please enter a Username"
                   name="username"
                   type="text"
                   value={formState.name}
@@ -61,7 +61,7 @@ const Signup = () => {
                 />
                 <input
                   className="form-input"
-                  placeholder="Your email"
+                  placeholder="Please enter your email address"
                   name="email"
                   type="email"
                   value={formState.email}
@@ -69,7 +69,7 @@ const Signup = () => {
                 />
                 <input
                   className="form-input"
-                  placeholder="******"
+                  placeholder="Please enter a password"
                   name="password"
                   type="password"
                   value={formState.password}
@@ -80,7 +80,7 @@ const Signup = () => {
                   style={{ cursor: 'pointer' }}
                   type="submit"
                 >
-                  Submit
+                  Create Account
                 </button>
               </form>
             )}
