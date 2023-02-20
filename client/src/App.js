@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {
   ApolloClient,
   InMemoryCache,
@@ -6,26 +7,26 @@ import {
   createHttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Layout } from 'antd';
 
 import Home from './pages/Home';
-import Signup from './pages/Signup';
+import Nav from './components/Nav';
 import Login from './pages/Login';
-import SingleThought from './pages/SingleThought';
+import SubscriptionsMenu from './components/SubscriptionsMenu';
 import Profile from './pages/Profile';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Signup from './pages/Signup';
+import Foot from './components/Footer';
+import Subscriptions from './pages/Subscriptions';
 
-// Construct our main GraphQL API endpoint
+
+
+const { Content } = Layout;
 const httpLink = createHttpLink({
-  uri: '/graphql',
+  uri: 'http://localhost:3001/graphql',
 });
 
-// Construct request middleware that will attach the JWT token to every request as an `authorization` header
 const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
   const token = localStorage.getItem('id_token');
-  // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
@@ -35,50 +36,57 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  // Set up our client to execute the `authLink` middleware prior to making the request to our GraphQL API
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
+const contentStyle = {
+  height: '100%',
+}
+
+const layoutStyle = {
+  height: '100vh',
+}
 
 function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <div className="flex-column justify-flex-start min-100-vh">
-          <Header />
-          <div className="container">
-            <Routes>
+      <Layout style={layoutStyle}>
+          <Nav />
+          <Content style={contentStyle}>
+          <Routes>
+            <Route 
+              path="/" 
+              element={<Home/>} 
+            />
+            <Route 
+              path="/login" 
+              element={<Login />} 
+            />
+            <Route 
+              path="/signup" 
+              element={<Signup />} 
+            />
+            <Route 
+              path="/SubscriptionsMenu" 
+              element={<SubscriptionsMenu />} 
+            />
               <Route 
-                path="/"
-                element={<Home />}
-              />
-              <Route 
-                path="/login"
-                element={<Login />}
-              />
-              <Route 
-                path="/signup"
-                element={<Signup />}
-              />
-              <Route 
-                path="/me"
-                element={<Profile />}
-              />
-              <Route 
-                path="/profiles/:username"
-                element={<Profile />}
-              />
-              <Route 
-                path="/thoughts/:thoughtId"
-                element={<SingleThought />}
-              />
-            </Routes>
-          </div>
-          <Footer />
-        </div>
+              path="/Subscriptions" 
+              element={<Subscriptions />} 
+            />
+            <Route 
+              path="/Profile" 
+              element={<Profile />} 
+            />
+          </Routes>
+          </Content>
+          <Foot/>
+        </Layout>
       </Router>
     </ApolloProvider>
   );
 }
 
 export default App;
+

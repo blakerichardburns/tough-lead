@@ -5,45 +5,54 @@ const typeDefs = gql`
     _id: ID
     username: String
     email: String
-    password: String
-    thoughts: [Thought]!
+    orders: [Order]
   }
 
-  type Thought {
-    _id: ID
-    thoughtText: String
-    thoughtAuthor: String
-    createdAt: String
-    comments: [Comment]!
-  }
 
-  type Comment {
-    _id: ID
-    commentText: String
-    commentAuthor: String
-    createdAt: String
-  }
+type Subscription {
+  _id: ID
+  name: String
+  description: String 
+  image: String
+  price: Float
+}
+  
 
   type Auth {
-    token: ID!
+    token: ID
     user: User
   }
 
+ 
+
   type Query {
-    users: [User]
-    user(username: String!): User
-    thoughts(username: String): [Thought]
-    thought(thoughtId: ID!): Thought
-    me: User
+    subscriptions(name:String): [Subscription]
+    subscription(_id: ID!): Subscription
+    user: User
+    order(_id: ID!): Order
+  }
+
+  type Order {
+    _id: ID 
+    purchaseDate: String
+    subscriptions: [Subscription]
   }
 
   type Mutation {
-    addUser(username: String!, email: String!, password: String!): Auth
+    addUser(
+      username: String! 
+      email: String!
+      password: String!
+      ): Auth
+      addOrder(subscriptions: [ID]!): Order
+      updateUser(
+        username: String
+        email: String
+        password: String
+      ): User
+      updateSubscription(_id: ID!): Subscription
+      cancelSubscription(_id: ID!): Subscription
     login(email: String!, password: String!): Auth
-    addThought(thoughtText: String!): Thought
-    addComment(thoughtId: ID!, commentText: String!): Thought
-    removeThought(thoughtId: ID!): Thought
-    removeComment(thoughtId: ID!, commentId: ID!): Thought
   }
 `;
 

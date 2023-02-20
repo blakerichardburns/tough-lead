@@ -1,91 +1,98 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import { LOGIN_USER } from '../utils/mutations';
+import React, { useState } from "react";
+import { Button, Checkbox, Form, Input } from "antd";
+import { useMutation } from "@apollo/client";
+import { Link } from "react-router-dom";
+import { LOGIN } from "../utils/mutations";
+import Auth from "../utils/auth";
+import "../Login.css";
 
-import Auth from '../utils/auth';
+function Login(props) {
+  const [form] = Form.useForm();
+  const [error, setError] = useState(null);
+  const [loginUser] = useMutation(LOGIN);
 
-const Login = (props) => {
-  const [formState, setFormState] = useState({ email: '', password: '' });
-  const [login, { error, data }] = useMutation(LOGIN_USER);
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    setFormState({
-      ...formState,
-      [name]: value,
-    });
-  };
-
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    console.log(formState);
+  const onFinish = async (values) => {
     try {
-      const { data } = await login({
-        variables: { ...formState },
+      const { data } = await loginUser({
+        variables: values,
       });
-
-      Auth.login(data.login.token);
+      const token = data.login.token;
+      Auth.login(token);
     } catch (e) {
       console.error(e);
+      setError("The provided credentials are incorrect");
     }
+  };
 
-    setFormState({
-      email: '',
-      password: '',
-    });
+  const onFinishFailed = ({ errorFields }) => {
+    form.scrollToField(errorFields[0].name);
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    form.setFieldsValue({ [name]: value });
   };
 
   return (
-    <main className="flex-row justify-center mb-4">
-      <div className="col-12 col-lg-10">
-        <div className="card">
-          <h4 className="card-header bg-dark text-light p-2">Login</h4>
-          <div className="card-body">
-            {data ? (
-              <p>
-                Logged in!{' '}
-                <Link to="/">Start chewing here.</Link>
-              </p>
-            ) : (
-              <form onSubmit={handleFormSubmit}>
-                <input
-                  className="form-input"
-                  placeholder="Please enter your email address"
-                  name="email"
-                  type="email"
-                  value={formState.email}
-                  onChange={handleChange}
-                />
-                <input
-                  className="form-input"
-                  placeholder="Please enter your password"
-                  name="password"
-                  type="password"
-                  value={formState.password}
-                  onChange={handleChange}
-                />
-                <button
-                  className="btn btn-block btn-primary"
-                  style={{ cursor: 'pointer' }}
-                  type="submit"
-                >
-                  Log In
-                </button>
-              </form>
-            )}
+    <div className="login-container">
+      <Form
+        name="login"
+        form={form}
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+      >
+        <Form.Item
+          label="Email address"
+          name="email"
+          rules={[
+            {
+              type: "email",
+              required: true,
+              message: "Please enter a valid email address",
+            },
+          ]}
+        >
+          <Input
+            placeholder="youremail@test.com"
+            name="email"
+            type="email"
+            onChange={handleInputChange}
+          />
+        </Form.Item>
 
-            {error && (
-              <div className="my-3 p-3 bg-danger text-white">
-                {error.message}
-              </div>
-            )}
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Please enter your password",
+            },
+          ]}
+        >
+          <Input.Password
+            placeholder="******"
+            name="password"
+            type="password"
+            onChange={handleInputChange}
+          />
+        </Form.Item>
+
+        {error && (
+          <div>
+            <p className="error-text">{error}</p>
           </div>
-        </div>
-      </div>
-    </main>
+        )}
+
+        <Form.Item className="sub-but">
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
-};
+}
 
 export default Login;

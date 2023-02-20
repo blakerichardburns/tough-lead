@@ -1,64 +1,54 @@
 import React from 'react';
-import { Navigate, useParams } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { Card, Layout, Typography } from 'antd';
 
-import ThoughtForm from '../components/ThoughtForm';
-import ThoughtList from '../components/ThoughtList';
+const { Content } = Layout;
+const { Title } = Typography;
 
-import { QUERY_USER, QUERY_ME } from '../utils/queries';
+const profileStyle = {
+  padding: '2rem',
+  borderRadius: '0.5rem',
+};
 
-import Auth from '../utils/auth';
+const subscriptionCardStyle = {
+  borderRadius: '0.5rem',
+  boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+};
 
-const Profile = () => {
-  const { username: userParam } = useParams();
-
-  const { loading, data } = useQuery(userParam ? QUERY_USER : QUERY_ME, {
-    variables: { username: userParam },
-  });
-
-  const user = data?.me || data?.user || {};
-  if (Auth.loggedIn() && Auth.getProfile().data.username === userParam) {
-    return <Navigate to="/me" />;
-  }
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user?.username) {
-    return (
-      <h4>
-        Please log in...
-      </h4>
-    );
-  }
+const ProfilePage = ({ subscribed, cancelSubscription }) => {
+  const subscription = {
+    name: 'Gold',
+    price: '$19.99/month',
+    features: ['Unlimited access to all courses', 'Exclusive content', 'Personalized recommendations'],
+  };
 
   return (
-    <div>
-      <div className="flex-row justify-center mb-3">
-        <h2 className="col-12 col-md-10 bg-dark text-light p-3 mb-5">
-          {userParam ? `${user.username}'s` : 'Your'} Subscriptions.
-        </h2>
-
-        <div className="col-12 col-md-10 mb-5">
-          <ThoughtList
-            thoughts={user.thoughts}
-            title={`${user.username}'s thoughts...`}
-            showTitle={false}
-            showUsername={false}
-          />
+    <Layout>
+      <Content>
+        <div style={profileStyle}>
+          {/* add users name instead of 'My Profile' */}
+          <Title level={2}>My Profile</Title> 
+          {subscribed ? (
+            <>
+              <Title level={4}>Subscription Information</Title>
+              <Card style={subscriptionCardStyle}>
+                <Title level={3}>{subscription.name} Subscription</Title>
+                <p>Price: {subscription.price}</p>
+                <p>Features:</p>
+                <ul>
+                  {subscription.features.map((feature, index) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+                </ul>
+                <button onClick={cancelSubscription}>Cancel Subscription</button>
+              </Card>
+            </>
+          ) : (
+            <Title level={4}>No Subscription</Title>
+          )}
         </div>
-        {!userParam && (
-          <div
-            className="col-12 col-md-10 mb-3 p-3"
-            style={{ border: '1px dotted #1a1a1a' }}
-          >
-            <ThoughtForm />
-          </div>
-        )}
-      </div>
-    </div>
+      </Content>
+    </Layout>
   );
 };
 
-export default Profile;
+export default ProfilePage;
