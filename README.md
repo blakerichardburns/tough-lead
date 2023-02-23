@@ -32,4 +32,4 @@ As developers of this food-flavored pencil subscription app, our goal is to crea
   ## Contact
   metoama@gmail.com <br>
   solohuckstep@gmail.com <br>
-  blakerichardburns@gmail.com <br>
+  blakerichardburns@gmail.com
