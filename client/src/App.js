@@ -12,17 +12,16 @@ import { Layout } from 'antd';
 import Home from './pages/Home';
 import Nav from './components/Nav';
 import Login from './pages/Login';
-import SubscriptionsMenu from './components/SubscriptionsMenu';
+import Ratings from './components/Ratings';
 import Profile from './pages/Profile';
 import Signup from './pages/Signup';
 import Foot from './components/Footer';
 import Subscriptions from './pages/Subscriptions';
 
 
-
 const { Content } = Layout;
 const httpLink = createHttpLink({
-  uri: '/graphql',
+  uri: 'http://localhost:3001/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -63,22 +62,23 @@ function App() {
               path="/login" 
               element={<Login />} 
             />
+              <Route 
+                path="/profile" 
+                element={<Profile />} 
+              />
             <Route 
               path="/signup" 
               element={<Signup />} 
             />
             <Route 
-              path="/SubscriptionsMenu" 
-              element={<SubscriptionsMenu />} 
+              path="/ratings" 
+              element={<Ratings />} 
             />
               <Route 
-              path="/Subscriptions" 
+              path="/subscriptions" 
               element={<Subscriptions />} 
             />
-            <Route 
-              path="/Profile" 
-              element={<Profile />} 
-            />
+         
           </Routes>
           </Content>
           <Foot/>
