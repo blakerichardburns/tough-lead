@@ -18,7 +18,6 @@ import Signup from './pages/Signup';
 import Foot from './components/Footer';
 import Subscriptions from './pages/Subscriptions';
 
-App.js
 const { Content } = Layout;
 const httpLink = createHttpLink({
   uri: '/graphql',
