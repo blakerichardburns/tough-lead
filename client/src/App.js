@@ -18,10 +18,10 @@ import Signup from './pages/Signup';
 import Foot from './components/Footer';
 import Subscriptions from './pages/Subscriptions';
 
-
+App.js
 const { Content } = Layout;
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3001/graphql',
+  uri: '/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
